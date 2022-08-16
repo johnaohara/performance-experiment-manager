@@ -1,5 +1,6 @@
 package io.hyperfoil.tools.experimentManager;
 
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineExecutable;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.api.dto.RunningExperiment;
@@ -90,6 +91,23 @@ public class ExperimentManager {
         } catch (ConfigParserException e) {
             e.printStackTrace();
             return ApiResult.failure("Could not parse config: ".concat(e.getMessage()));
+        }
+    }
+
+    public ApiResult initializeExperiment(String experimentName) {
+
+        try {
+            if( !pipelines.containsKey(experimentName)){
+                return ApiResult.failure(String.format("Could not find experiment: %s", experimentName));
+            }
+
+            ExperimentPipeline pipeline = pipelines.get(experimentName);
+            pipeline.initialize();
+            return ApiResult.success();
+
+        } catch (ExecutableInitializationException e) {
+            e.printStackTrace();
+            return ApiResult.failure("Could not initialize experiment pipeline: ".concat(e.getMessage()));
         }
     }
 

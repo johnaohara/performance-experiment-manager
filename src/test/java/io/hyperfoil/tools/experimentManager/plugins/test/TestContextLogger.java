@@ -1,6 +1,7 @@
 package io.hyperfoil.tools.experimentManager.plugins.test;
 
 import io.hyperfoil.tools.experimentManager.api.BasePipelineExecutable;
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.parser.ConfigurationParser;
@@ -27,7 +28,7 @@ public class TestContextLogger implements Plugin<Map<String, Object>> {
                     List<String> errors = new ArrayList<>();
                     return errors; //TODO: Fill out error handling
                 },
-                (config, section, builder) -> config.addPipelineExecutable(
+                (config, section, builder) -> config.addExecutable(
                         TestProcessorExecutable.instance()
                                 .variable(section.get("variable").toString())
                 ));
@@ -72,6 +73,11 @@ public class TestContextLogger implements Plugin<Map<String, Object>> {
             } else {
                 logger.errorf("Context Variable MISSING: %s", this.variable);
             }
+        }
+
+        @Override
+        public void initialize() throws ExecutableInitializationException {
+            //do nothing - this executable does not need to initialize any remote service
         }
 
     }

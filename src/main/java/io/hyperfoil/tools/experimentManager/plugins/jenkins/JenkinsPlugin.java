@@ -1,6 +1,7 @@
 package io.hyperfoil.tools.experimentManager.plugins.jenkins;
 
 import io.hyperfoil.tools.experimentManager.api.BasePipelineExecutable;
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.parser.ConfigurationParser;
@@ -47,7 +48,7 @@ public class JenkinsPlugin implements Plugin<Map<String, Object>> {
                             .job(section.get("job").toString())
                             .job_url(section.get("job_url").toString());
 
-                    config.addPipelineExecutable(jenkinsExecutable);
+                    config.addExecutable(jenkinsExecutable);
 
                 });
     }
@@ -92,6 +93,13 @@ public class JenkinsPlugin implements Plugin<Map<String, Object>> {
         @Override
         public void run(PipelineContext context) {
 
+        }
+
+        @Override
+        public void initialize() throws ExecutableInitializationException {
+            // TODO:
+            // - check that jenkins job exists
+            // -
         }
 
         private record  JenkinsParam (String paramName, String tunable) {}

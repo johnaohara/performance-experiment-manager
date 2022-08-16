@@ -1,5 +1,6 @@
 package io.hyperfoil.tools.experimentManager.pipeline;
 
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineExecutable;
 
 public class ExperimentPipeline {
@@ -23,7 +24,7 @@ public class ExperimentPipeline {
         this.experimentName = experimentName;
     }
 
-    public void addPipelineExecutable(PipelineExecutable executable) {
+    public void addExecutable(PipelineExecutable executable) {
         if (head == null) {
             this.head = executable;
         } else {
@@ -36,7 +37,7 @@ public class ExperimentPipeline {
         }
     }
 
-    public int pipelinesize() {
+    public int size() {
         int count = 0;
         if(head != null){
             count++;
@@ -48,6 +49,15 @@ public class ExperimentPipeline {
             }
         }
         return count;
+    }
+
+    public void initialize() throws ExecutableInitializationException {
+        PipelineExecutable cur = head;
+        while(cur != null){
+            cur.initialize();
+            cur = cur.next();
+        }
+
     }
 
 }

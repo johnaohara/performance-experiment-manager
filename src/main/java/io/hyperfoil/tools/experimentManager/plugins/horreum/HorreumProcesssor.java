@@ -1,6 +1,7 @@
 package io.hyperfoil.tools.experimentManager.plugins.horreum;
 
 import io.hyperfoil.tools.experimentManager.api.BasePipelineExecutable;
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.parser.ConfigurationParser;
@@ -28,7 +29,7 @@ public class HorreumProcesssor implements Plugin<Map<String, Object>> {
                     List<String> errors = new ArrayList<>();
                     return errors; //TODO: Fill out error handling
                 },
-                (config, section, builder) -> config.addPipelineExecutable(
+                (config, section, builder) -> config.addExecutable(
                         HorreumExecutable.instance()
                                 .jobId(section.get("jobID"))
                 ));
@@ -69,7 +70,16 @@ public class HorreumProcesssor implements Plugin<Map<String, Object>> {
 
         @Override
         public void run(PipelineContext context) {
-            logger.infof("Procesing horreum job: %d", this.horreumJobID);
+            logger.infof("Processing Horreum job: %d", this.horreumJobID);
+        }
+
+        @Override
+        public void initialize() throws ExecutableInitializationException {
+            //TODO:
+            // - check existing definition ,delete if appropriate - make behaviour configurable
+            // - create new experiment definition
+            // - get initial configuration
+
         }
 
     }

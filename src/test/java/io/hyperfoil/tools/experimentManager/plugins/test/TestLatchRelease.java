@@ -1,6 +1,7 @@
 package io.hyperfoil.tools.experimentManager.plugins.test;
 
 import io.hyperfoil.tools.experimentManager.api.BasePipelineExecutable;
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.parser.ConfigurationParser;
@@ -39,7 +40,7 @@ public class TestLatchRelease implements Plugin<Map<String, Object>> {
                 }, //validation
                 (config, section, builder) -> {
                     logger.debug("Parsing test-latch-release section");
-                    config.addPipelineExecutable(TestLatchReleaseExecutable.instance());
+                    config.addExecutable(TestLatchReleaseExecutable.instance());
                 });
     }
 
@@ -62,6 +63,11 @@ public class TestLatchRelease implements Plugin<Map<String, Object>> {
             } else {
                 logger.warn("Could not find CountdownLatch in context!");
             }
+        }
+
+        @Override
+        public void initialize() throws ExecutableInitializationException {
+            //do nothing - this executable does not need to initialize any remote service
         }
     }
 

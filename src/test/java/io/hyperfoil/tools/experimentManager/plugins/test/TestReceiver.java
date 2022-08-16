@@ -1,6 +1,7 @@
 package io.hyperfoil.tools.experimentManager.plugins.test;
 
 import io.hyperfoil.tools.experimentManager.api.BasePipelineExecutable;
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.parser.ConfigurationParser;
@@ -30,7 +31,7 @@ public class TestReceiver implements Plugin<Map<String, Object>> {
                 (section, builder) -> null, //validation
                 (config, section, builder) -> {
                     logger.debug("Parsing test-receiver section");
-                    config.addPipelineExecutable(TestReceiverExecutable.instance().id("1"));
+                    config.addExecutable(TestReceiverExecutable.instance().id("1"));
                 });
     }
 
@@ -55,6 +56,11 @@ public class TestReceiver implements Plugin<Map<String, Object>> {
         @Override
         public void run(PipelineContext context) {
             logger.infof("Running: test-receiver; %s", this.id);
+        }
+
+        @Override
+        public void initialize() throws ExecutableInitializationException {
+            //do nothing - this executable does not need to initialize any remote service
         }
     }
 

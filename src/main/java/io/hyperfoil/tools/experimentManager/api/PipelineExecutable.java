@@ -9,4 +9,6 @@ public interface PipelineExecutable extends Runnable {
     void setContext(PipelineContext context);
 
     void run(PipelineContext context);
+
+    void initialize() throws ExecutableInitializationException;
 }

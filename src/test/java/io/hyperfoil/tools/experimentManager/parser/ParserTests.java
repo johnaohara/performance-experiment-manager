@@ -29,7 +29,7 @@ public class ParserTests {
             ExperimentPipeline config = yamlParser.parseYaml(testPipelineDef);
             assertNotNull(config);
             assertEquals("test-pipeline", config.getExperimentName());
-            assertEquals(1, config.pipelinesize());
+            assertEquals(1, config.size());
 
 
         } catch (ConfigParserException e) {
@@ -52,7 +52,7 @@ public class ParserTests {
             ExperimentPipeline config = yamlParser.parseYaml(testPipelineDef);
             assertNotNull(config);
             assertEquals("test-pipeline", config.getExperimentName());
-            assertEquals(2, config.pipelinesize());
+            assertEquals(2, config.size());
 
 
             PipelineExecutable executable = config.getHead().next();

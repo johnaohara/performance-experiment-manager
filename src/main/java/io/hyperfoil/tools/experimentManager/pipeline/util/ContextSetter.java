@@ -1,6 +1,7 @@
 package io.hyperfoil.tools.experimentManager.pipeline.util;
 
 import io.hyperfoil.tools.experimentManager.api.BasePipelineExecutable;
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.parser.ConfigurationParser;
@@ -55,7 +56,7 @@ public class ContextSetter implements Plugin<Map<String, Object>> {
                 }, //validation
 
                 (config, section, builder) -> {
-                    config.addPipelineExecutable(
+                    config.addExecutable(
                             TestContextIncrementerExecutable.instance()
                                     .variable((String) section.get("variable"))
                                     .initialValue((Integer) section.get("initial-value"))
@@ -90,6 +91,11 @@ public class ContextSetter implements Plugin<Map<String, Object>> {
         @Override
         public void run(PipelineContext context) {
             context.<Integer>setObject(this.contextVariableName, initialValue);
+        }
+
+        @Override
+        public void initialize() throws ExecutableInitializationException {
+            //do nothing - this executable does not need to initialize any remote service
         }
 
     }

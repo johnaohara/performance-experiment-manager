@@ -1,6 +1,7 @@
 package io.hyperfoil.tools.experimentManager.plugins.test;
 
 import io.hyperfoil.tools.experimentManager.api.BasePipelineExecutable;
+import io.hyperfoil.tools.experimentManager.api.ExecutableInitializationException;
 import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.hyperfoil.tools.experimentManager.api.Plugin;
 import io.hyperfoil.tools.experimentManager.parser.ConfigurationParser;
@@ -38,7 +39,7 @@ public class TestContextIncrementer implements Plugin<Map<String, Object>> {
                     return errors; //TODO: Fill out error handling
                 }, //validation
                 (config, section, builder) -> {
-                    config.addPipelineExecutable(
+                    config.addExecutable(
                             TestContextIncrementerExecutable.instance().variable((String) section.get("variable"))
                     );
                 });
@@ -71,6 +72,11 @@ public class TestContextIncrementer implements Plugin<Map<String, Object>> {
             } else {
                 logger.errorf("Missing context payload; %s", this.contextVariableName);
             }
+        }
+
+        @Override
+        public void initialize() throws ExecutableInitializationException {
+            //do nothing - this executable does not need to initialize any remote service
         }
 
     }
