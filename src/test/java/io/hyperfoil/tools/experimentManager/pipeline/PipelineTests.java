@@ -24,7 +24,7 @@ public class PipelineTests extends BasePipelineTest {
     }
 
     @Test
-    public void simpleContextPropogrationTest() {
+    public void simpleContextPropagrationTest() {
         var testPipelineDef = """
                     test-propagation-pipeline:
                       - context-setter:
@@ -47,6 +47,30 @@ public class PipelineTests extends BasePipelineTest {
         Integer counter = pipelineContext.<Integer>getObject("test-counter");
 
         assertEquals(13, counter);
+
+    }
+
+    @Test
+    public void simpleInputOutputTest() {
+        var testPipelineDef = """
+                    test-propagation-pipeline:
+                      - context-setter:
+                          variable: test-counter
+                          initial-value: 10
+                      - test-context-incrementer:
+                          variable: test-counter
+                      - test-context-output:
+                          variable: test-counter
+                      - test-input-logger:
+                      - test-latch-release:
+                """;
+
+        PipelineContext pipelineContext = executePipeline("test-propagation-pipeline", testPipelineDef);
+
+        if( pipelineContext == null){
+            fail("Returned null PipelineContext");
+        }
+        Integer counter = pipelineContext.<Integer>getObject("test-counter");
 
     }
 

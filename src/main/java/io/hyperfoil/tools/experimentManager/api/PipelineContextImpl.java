@@ -2,11 +2,15 @@ package io.hyperfoil.tools.experimentManager.api;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 //TODO: needs to be thread safe
 public class PipelineContextImpl implements PipelineContext {
 
     private HashMap<String, Object> content = new HashMap<>();
+
+    //TODO - do we need to duplicate this?
+    private Map<String, Object> result = null;
 
 
     @Override
@@ -26,8 +30,18 @@ public class PipelineContextImpl implements PipelineContext {
 
     @Override
     public void removeObject(String name) {
-        if(hasObject(name)){
+        if (hasObject(name)) {
             content.remove(name);
         }
+    }
+
+    @Override
+    public Map<String, Object> getResult() {
+        return this.result;
+    }
+
+    @Override
+    public void setResult(Map<String, Object> result) {
+        this.result = result;
     }
 }
