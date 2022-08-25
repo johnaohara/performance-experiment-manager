@@ -4,8 +4,7 @@ import io.hyperfoil.tools.experimentManager.api.PipelineContext;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class PipelineTests extends BasePipelineTest {
@@ -74,4 +73,24 @@ public class PipelineTests extends BasePipelineTest {
 
     }
 
+    @Test
+    public void simpleOutputFactoryTest() {
+        var testPipelineDef = """
+                    test-propagation-pipeline:
+                      - test-output-factory:
+                          variable: test-counter
+                          initial-value: 10
+                      - test-input-logger:
+                      - test-latch-release:
+                """;
+
+        PipelineContext pipelineContext = executePipeline("test-propagation-pipeline", testPipelineDef);
+
+        if( pipelineContext == null){
+            fail("Returned null PipelineContext");
+        }
+        assertTrue(pipelineContext.getResult().containsKey("variable"));
+        assertEquals(10, pipelineContext.getResult().get("initial-value"));
+
+    }
 }

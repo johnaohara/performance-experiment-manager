@@ -9,6 +9,7 @@ public interface PipelineContext {
     boolean hasObject(String name);
     void removeObject(String name);
 
+    //TODO:: should we use a separate data structure, or insert as regular context Object with reserved key name
     Map<String, Object> getResult();
     void setResult(Map<String, Object> result);
 
