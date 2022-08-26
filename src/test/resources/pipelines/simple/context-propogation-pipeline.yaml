@@ -1,0 +1,5 @@
+test-propagation-pipeline:
+  - context-setter:
+      variable: test-counter
+      initial-value: 10
+  - input-logger:
