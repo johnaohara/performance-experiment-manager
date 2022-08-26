@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { accessibleRouteChangeHandler } from './utils/utils';
 import { Pipelines } from './/Pipelines/Pipelines';
-// import { PipelineDetails } from './/Pipelines/components/PipelineDetails';
+import { PipelineDetails } from './/Pipelines/components/PipelineDetails';
 import { NewPipelineWizard } from './/Pipelines/new/NewPipeline';
 // import { GeneralSettings } from './/Settings/General/GeneralSettings';
 // import { AboutSettings } from './/Settings/About/AboutSettings';
@@ -30,7 +30,14 @@ const routes: IAppRoute[] = [
     exact: true,
     label: 'Pipelines',
     path: '/',
-    title: 'HPO | Pipelines',
+    title: 'Pipelines',
+  },
+  {
+    component: Pipelines,
+    exact: true,
+    label: 'Pipelines',
+    path: '/pipelines',
+    title: 'Pipelines',
   },
   {
 
@@ -39,6 +46,14 @@ const routes: IAppRoute[] = [
     label: 'New Pipeline',
     path: '/new',
     title: 'New Pipeline',
+    isMenuItem: false
+  },
+  {
+    component: PipelineDetails,
+    exact: true,
+    label: 'Pipeline Details',
+    path: '/pipeline/:name',
+    title: 'Pipeline Details',
     isMenuItem: false
   },
 ];

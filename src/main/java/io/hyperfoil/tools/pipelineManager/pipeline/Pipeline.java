@@ -7,6 +7,7 @@ public class Pipeline {
 
     private volatile String pipelineName;
     private volatile PipelineExecutable head;
+    private volatile PipelineState state;
 
     public void pipelineHead(PipelineExecutable executable) {
         this.head = executable;
@@ -60,4 +61,8 @@ public class Pipeline {
 
     }
 
+
+    public enum PipelineState{
+        UNUSED
+    }
 }

@@ -11,6 +11,8 @@ import io.hyperfoil.tools.pipelineManager.pipeline.Pipeline;
 import io.hyperfoil.tools.pipelineManager.plugins.horreum.api.ApiResult;
 import io.quarkus.runtime.StartupEvent;
 import org.eclipse.microprofile.context.ManagedExecutor;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.event.Observes;
@@ -21,17 +23,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Singleton
 public class PipelineManager {
 
     private static final Logger LOGGER = Logger.getLogger(PipelineManager.class);
 
+    @Channel("experiments-summary-out")
+    Emitter<List<RunningPipeline>> experimentSummaryEmitter;
+
     private Map<String, Pipeline> pipelines;
 
     @Inject
-    ConfigurationParser yamlParser;
+    ConfigurationParser parser;
 
     //TODO: review how best to execute asynchronously
     // atm we probably want worker pool here
@@ -68,14 +72,18 @@ public class PipelineManager {
     }
 
     @Transactional
-    public List<RunningPipeline> getRunningExperiments() {
+    public List<RunningPipeline> getRunningPipelines() {
 
         List<RunningPipeline> runningPipelines = null;
+/*
         try (Stream<PipelineDAO> pipeliness = PipelineDAO.streamAll()) {
             runningPipelines = pipeliness
                     .map(e -> new RunningPipeline(e.name, e.total_trials, e.currentTrial, e.state))
                     .collect(Collectors.toList());
         }
+*/
+        //TOOD:: make this generic from database
+        runningPipelines = this.pipelines.values().stream().map( pipeline -> new RunningPipeline(pipeline.getPipelineName(), 0, 1, PipelineDAO.State.NEW)).collect(Collectors.toList());
         return runningPipelines;
 
     }
@@ -83,7 +91,9 @@ public class PipelineManager {
     public ApiResult createNewExperiment(String config) {
 
         try {
-            Pipeline pipeline = yamlParser.parseYaml(config);
+            Pipeline pipeline = parser.build(config);
+
+            LOGGER.infof("New pipeline created: %s", pipeline.getPipelineName());
 
             pipelines.put(pipeline.getPipelineName(), pipeline);
             return ApiResult.success();

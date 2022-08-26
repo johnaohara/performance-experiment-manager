@@ -15,7 +15,7 @@ public class ConfigurationParser {
     @Inject
     PipelineFactory pipelineBuilder;
 
-    public Pipeline parseYaml(String yml) throws ConfigParserException {
+    public Pipeline build(String yml) throws ConfigParserException {
         //initialize yaml parser
         LoadSettings settings = LoadSettings.builder().build();
         Load load = new Load(settings);

@@ -26,7 +26,7 @@ public class ParserTests {
                 """;
 
         try {
-            Pipeline config = yamlParser.parseYaml(testPipelineDef);
+            Pipeline config = yamlParser.build(testPipelineDef);
             assertNotNull(config);
             assertEquals("test-pipeline", config.getPipelineName());
             assertEquals(1, config.size());
@@ -49,7 +49,7 @@ public class ParserTests {
                 """;
 
         try {
-            Pipeline config = yamlParser.parseYaml(testPipelineDef);
+            Pipeline config = yamlParser.build(testPipelineDef);
             assertNotNull(config);
             assertEquals("test-pipeline", config.getPipelineName());
             assertEquals(2, config.size());
@@ -75,7 +75,7 @@ public class ParserTests {
                 """;
 
         try {
-            yamlParser.parseYaml(testPipelineDef);
+            yamlParser.build(testPipelineDef);
             fail("Should have thrown ConfigParserException");
 
         } catch (ConfigParserException e) {
